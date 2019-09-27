@@ -1,0 +1,11 @@
+{application, gsm_coder, [
+    {description, "GSM encoding/decoding"},
+    {vsn, "0.1"},
+    {registered, []},
+    {applications, [kernel, stdlib]},
+    {files, [
+        "c_src",
+        "rebar.config",
+        "src"
+    ]}
+]}.
