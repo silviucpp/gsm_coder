@@ -1,11 +1,29 @@
 {application, gsm_coder, [
-    {description, "GSM encoding/decoding"},
-    {vsn, "0.1"},
+    {description, "A GSM 7/8 character strings encoder/decoder for Erlang based on the implementation from Android Open Source Project."},
+    {vsn, "1.0.0"},
+    {licenses, ["GNU"]},
+    {links,[{"Github","https://github.com/silviucpp/gsm_coder"}]},
     {registered, []},
-    {applications, [kernel, stdlib]},
+    {applications, [
+        kernel,
+        stdlib
+    ]},
+    {mod, {gsm_coder_app, []}},
+    {env, []},
     {files, [
-        "c_src",
+        "LICENSE*",
+        "*.MD",
+        "Makefile",
         "rebar.config",
-        "src"
+        "rebar.lock",
+        "src/*.erl",
+        "src/*.src",
+        "c_src/*.h",
+        "c_src/*.cc",
+        "c_src/*.c",
+        "c_src/Makefile",
+        "c_src/nif.mk",
+        "test/*.erl",
+        "test/*.spec"
     ]}
 ]}.

@@ -1,57 +1,101 @@
-%%%-------------------------------------------------------------------
-%%% @author Danil Onishchenko <onishchenko@svyazcom.ru>
-%%% @doc
-%%%
-%%% @end
 %%% Created : 11 Apr 2019 by Danil Onishchenko <onishchenko@svyazcom.ru>
-%%%-------------------------------------------------------------------
+%%% Improvements - Silviu Caragea <silviu.cpp@gmail.com>
+
 -module(gsm_coder).
 
-%% API
--export([utf8_check_gsm7/1, sms_text_parts_number/1,
-    utf8_to_gsm7/1, utf8_from_gsm7/1,
-    utf8_to_gsm8/1, utf8_from_gsm8/1]).
--on_load(init/0).
+-define(NOT_LOADED, not_loaded(?LINE)).
 
-%%%===================================================================
-%%% API
-%%%===================================================================
-utf8_check_gsm7(_) ->
-    exit(nif_library_not_loaded).
+-type reason() :: any().
 
-sms_text_parts_number(_) ->
-    exit(nif_library_not_loaded).
+-on_load(load_nif/0).
 
-utf8_to_gsm7(_) ->
-    exit(nif_library_not_loaded).
+-export([
+    start/0,
+    start/1,
+    stop/0,
 
-utf8_from_gsm7(_) ->
-    exit(nif_library_not_loaded).
+    utf8_check_gsm7/1,
+    sms_text_parts_number/1,
+    utf8_to_gsm7/1,
+    utf8_from_gsm7/1,
+    utf8_to_gsm8/1,
+    utf8_from_gsm8/1
+]).
 
-utf8_to_gsm8(_) ->
-    exit(nif_library_not_loaded).
+-spec start() ->
+    ok  | {error, reason()}.
 
-utf8_from_gsm8(_) ->
-    exit(nif_library_not_loaded).
+start() ->
+    start(temporary).
 
-init() ->
-    PrivDir = case code:priv_dir(?MODULE) of
-    		  {error, _} ->
-    		      EbinDir = filename:dirname(code:which(?MODULE)),
-    		      AppPath = filename:dirname(EbinDir),
-    		      filename:join(AppPath, "priv");
-    		  Path ->
-    		      Path
-    	      end,
-    ok = erlang:load_nif(filename:join(PrivDir, "gsm_coder"), 0).
-    %% ok = erlang:load_nif("./gsm_coder", 0).
+-spec start(permanent | transient | temporary) ->
+    ok | {error, reason()}.
 
-%%--------------------------------------------------------------------
-%% @doc
-%% @spec
-%% @end
-%%--------------------------------------------------------------------
+start(Type) ->
+    case application:ensure_all_started(gsm_coder, Type) of
+        {ok, _} ->
+            ok;
+        Other ->
+            Other
+    end.
 
-%%%===================================================================
-%%% Internal functions
-%%%===================================================================
+-spec stop() ->
+    ok.
+
+stop() ->
+    application:stop(gsm_coder).
+
+-spec utf8_check_gsm7(binary()) ->
+    boolean() | {error, reason()}.
+
+utf8_check_gsm7(_Bin) ->
+    ?NOT_LOADED.
+
+-spec sms_text_parts_number(binary()) ->
+    integer() | {error, reason()}.
+
+sms_text_parts_number(_Bin) ->
+    ?NOT_LOADED.
+
+-spec utf8_to_gsm7(binary()) ->
+    binary() | {error, reason()}.
+
+utf8_to_gsm7(_Bin) ->
+    ?NOT_LOADED.
+
+-spec utf8_from_gsm7(binary()) ->
+    binary() | {error, reason()}.
+
+utf8_from_gsm7(_Bin) ->
+    ?NOT_LOADED.
+
+-spec utf8_to_gsm8(binary()) ->
+    binary() | {error, reason()}.
+
+utf8_to_gsm8(_Bin) ->
+    ?NOT_LOADED.
+
+-spec utf8_from_gsm8(binary()) ->
+    binary() | {error, reason()}.
+
+utf8_from_gsm8(_Bin) ->
+    ?NOT_LOADED.
+
+% internals
+
+load_nif() ->
+    SoName = get_priv_path(?MODULE),
+    io:format(<<"Loading library: ~p ~n">>, [SoName]),
+    ok = erlang:load_nif(SoName, 0).
+
+get_priv_path(File) ->
+    case code:priv_dir(gsm_coder) of
+        {error, bad_name} ->
+            Ebin = filename:dirname(code:which(?MODULE)),
+            filename:join([filename:dirname(Ebin), "priv", File]);
+        Dir ->
+            filename:join(Dir, File)
+    end.
+
+not_loaded(Line) ->
+    erlang:nif_error({not_loaded, [{module, ?MODULE}, {line, Line}]}).
