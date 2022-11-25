@@ -1,6 +1,6 @@
 {application, gsm_coder, [
     {description, "A GSM 7/8 character strings encoder/decoder for Erlang based on the implementation from Android Open Source Project."},
-    {vsn, "1.0.0"},
+    {vsn, "1.0.1"},
     {licenses, ["GNU"]},
     {links,[{"Github","https://github.com/silviucpp/gsm_coder"}]},
     {registered, []},
