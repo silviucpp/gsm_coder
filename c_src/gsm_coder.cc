@@ -38,7 +38,7 @@ static ERL_NIF_TERM utf8_check_gsm7_nif(ErlNifEnv *env, int argc, const ERL_NIF_
     UNUSED(argc);
     ErlNifBinary text_bin;
 
-	if(!enif_inspect_iolist_as_binary(env, argv[0], &text_bin))
+	if(!enif_inspect_binary(env, argv[0], &text_bin))
 	    return make_badarg(env);
 
     if(utf8_check_gsm7(text_bin.data, text_bin.size))
@@ -52,7 +52,7 @@ static ERL_NIF_TERM sms_text_parts_number_nif(ErlNifEnv *env, int argc, const ER
     UNUSED(argc);
     ErlNifBinary text_bin;
 
-    if(!enif_inspect_iolist_as_binary(env, argv[0], &text_bin))
+    if(!enif_inspect_binary(env, argv[0], &text_bin))
 	    return make_badarg(env);
 
     if(utf8_check_gsm7(text_bin.data, text_bin.size))
@@ -78,7 +78,7 @@ static ERL_NIF_TERM utf8_to_gsm7_nif(ErlNifEnv *env, int argc, const ERL_NIF_TER
     UNUSED(argc);
     ErlNifBinary src_bin;
 
-    if(!enif_inspect_iolist_as_binary(env, argv[0], &src_bin))
+    if(!enif_inspect_binary(env, argv[0], &src_bin))
         return make_badarg(env);
 
     if(!utf8_check_gsm7(src_bin.data, src_bin.size))
@@ -95,7 +95,7 @@ static ERL_NIF_TERM utf8_from_gsm7_nif(ErlNifEnv *env, int argc, const ERL_NIF_T
     UNUSED(argc);
     ErlNifBinary src_bin;
 
-    if(!enif_inspect_iolist_as_binary(env, argv[0], &src_bin))
+    if(!enif_inspect_binary(env, argv[0], &src_bin))
         return make_badarg(env);
 
     int out_buffer_size = utf8_from_gsm7(src_bin.data, 0, src_bin.size, NULL);
@@ -109,7 +109,7 @@ static ERL_NIF_TERM utf8_to_gsm8_nif(ErlNifEnv *env, int argc, const ERL_NIF_TER
     UNUSED(argc);
     ErlNifBinary src_bin;
 
-    if(!enif_inspect_iolist_as_binary(env, argv[0], &src_bin))
+    if(!enif_inspect_binary(env, argv[0], &src_bin))
         return make_badarg(env);
 
     if(!utf8_check_gsm7(src_bin.data, src_bin.size))
@@ -126,7 +126,7 @@ static ERL_NIF_TERM utf8_from_gsm8_nif(ErlNifEnv *env, int argc, const ERL_NIF_T
     UNUSED(argc);
     ErlNifBinary src_bin;
 
-    if(!enif_inspect_iolist_as_binary(env, argv[0], &src_bin))
+    if(!enif_inspect_binary(env, argv[0], &src_bin))
         return make_badarg(env);
 
     int out_buffer_size = utf8_from_gsm8(src_bin.data, src_bin.size, NULL);
