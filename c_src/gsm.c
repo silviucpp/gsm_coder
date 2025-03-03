@@ -1030,13 +1030,12 @@ sim_adn_record_from_bytes( SimAdnRecord  rec, cbytes_t  data, int  len )
     {
         int      ton    = footer[ADN_OFFSET_TON_NPI];
         bytes_t  number = (bytes_t) rec->adn.number;
-        int      len    = sizeof(rec->adn.number)-1;
+
         int      count;
         if (ton != 0x81 && ton != 0x91)
             return -1;
         if (ton == 0x91) {
             *number++ = '+';
-            len      -= 1;
         }
         count = gsm_bcdnum_to_ascii( footer + ADN_OFFSET_NUMBER_START,
                                      num_len*2, number );

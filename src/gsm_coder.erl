@@ -10,10 +10,6 @@
 -on_load(load_nif/0).
 
 -export([
-    start/0,
-    start/1,
-    stop/0,
-
     utf8_check_gsm7/1,
     sms_text_parts_number/1,
     utf8_to_gsm7/1,
@@ -21,29 +17,6 @@
     utf8_to_gsm8/1,
     utf8_from_gsm8/1
 ]).
-
--spec start() ->
-    ok  | {error, reason()}.
-
-start() ->
-    start(temporary).
-
--spec start(permanent | transient | temporary) ->
-    ok | {error, reason()}.
-
-start(Type) ->
-    case application:ensure_all_started(gsm_coder, Type) of
-        {ok, _} ->
-            ok;
-        Other ->
-            Other
-    end.
-
--spec stop() ->
-    ok.
-
-stop() ->
-    application:stop(gsm_coder).
 
 -spec utf8_check_gsm7(binary()) ->
     boolean() | {error, reason()}.
@@ -84,9 +57,7 @@ utf8_from_gsm8(_Bin) ->
 % internals
 
 load_nif() ->
-    SoName = get_priv_path(?MODULE),
-    io:format(<<"Loading library: ~p ~n">>, [SoName]),
-    ok = erlang:load_nif(SoName, 0).
+    ok = erlang:load_nif(get_priv_path(?MODULE), 0).
 
 get_priv_path(File) ->
     case code:priv_dir(gsm_coder) of
